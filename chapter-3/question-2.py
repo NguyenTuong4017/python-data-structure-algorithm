@@ -51,11 +51,13 @@ class SinglyLinkedList():
 
         
     def pop(self):
+        #check if list is empty
         if self._tail is None:
             return None
         
         current_node = self._head
         
+        #check if list size is 1
         if self._size == 1:
             val = self._tail
             self._head = None
@@ -64,6 +66,7 @@ class SinglyLinkedList():
             return val.data
         else:
             val = self._tail
+            #find the node before the tail then change the pointer and delete the last value
             while current_node is not None:
                 if current_node.next == self._tail:
                     self._tail = current_node
