@@ -49,37 +49,38 @@ class SinglyLinkedList():
         self._size += 1
 
     def pop(self):
-        """
+            """
         Removes the last node of the list
         
         Parameters: None
         
         Returns:
             The content of the removed node. If list is empty, returns None
-        """
-         #check if list is empty
-        if self._tail is None:
-            return None
-        
-        current_node = self._head
-        
-        #check if list size is 1
-        if self._size == 1:
-            val = self._tail
-            self._head = None
-            self._tail = None
-            self._size -= 1
-            return val.data
-        else:
-            val = self._tail
-            #find the node before the tail then change the pointer and delete the last value
-            while current_node is not None:
-                if current_node.next == self._tail:
-                    self._tail = current_node
-                    current_node.next = None
-                    self._size -= 1
+            """
+        #check if the list is empty then return None
+            if self._head is None:
+                return None
+            else:
+                current_node = self._head
+                
+                #check if the list has only one value
+                if current_node.next is None:
+                    val = current_node
+                    
+                    #delete the node
+                    del(current_node)
+                    
+                    self._head = None
                     return val.data
-                current_node = current_node.next
+                #if the next next node is None then get the node before the last node
+                while current_node.next.next is not None:
+                    current_node = current_node.next
+                #assign last node to val
+                val = current_node.next
+                #change the pointer to None
+                current_node.next = None
+                
+                return val.data
 
     def insert(self, index, value):
         """
