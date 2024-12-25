@@ -66,40 +66,68 @@ class Tree:
         Returns:
         - The node that contains such data or None if data is not found
         """
-
-        if data == self._root_node.data:
-            return self._root_node.__repr__()
-
-        current_node = self._root_node
-
-        while current_node:
-
-            if current_node.data == data:
-                return current_node.__repr__()
-
-            if data <= current_node.data:
-                current_node = current_node._left_child
+        current = self._root_node
+        while current:
+            if current.data == data:
+                return current
+            elif current.data > data:
+                current = current._left_child
             else:
-                current_node = current_node._right_child
+                current = current._right_child
+        return None
+
+    def _detach_node(self, node):
+        """
+        Detach a node from the tree. Node to be detached has one child at most.
+        An error will be raised otherwise.
+        """
+
+        current_node = self._find(node.data)
+
+        if current_node == self._root_node:
+            if current_node._left_child == None and current_node._right_child == None:
+                self._root_node = None
+            else:
+                raise ValueError
+
+        else:
+
+            pnode = current_node._parent
+
+            if current_node._left_child == None and current_node._right_child == None:
+                if current_node.data < pnode.data:
+                    current_node._parent = None
+                    pnode._left_child = None
+                else:
+                    current_node._parent = None
+                    pnode._right_child = None
+            else:
+                if current_node._left_child == None:
+                    child = current_node._right_child
+                    current_node._right_child = None
+                    current_node._parent = None
+
+                    if child.data > pnode.data:
+                        pnode._right_child = child
+                    else:
+                        pnode._left_child = child
+                else:
+                    child = current_node._left_child
+                    current_node._left_child = None
+                    current_node._parent = None
+                    if child.data > pnode.data:
+                        pnode._right_child = child
+                    else:
+                        pnode._left_child = child
 
 
 tree = Tree()
 tree.insert(50)
-tree.insert(20)
-tree.insert(10)
-tree.insert(70)
-tree.insert(90)
-tree.insert(65)
-tree.insert(10)
 tree.insert(40)
-tree.insert(30)
-tree.insert(10)
-tree.insert(100)
-tree.insert(35)
-tree.insert(5)
-tree.insert(10)
-tree.insert(7)
-tree.insert(40)
-tree.insert(50)
-tree.insert(8)
-print(tree._find(20))
+tree.insert(60)
+node = tree._find(50)
+try:
+    tree._detach_node(node)
+except ValueError:
+    pass
+print(tree._root_node)

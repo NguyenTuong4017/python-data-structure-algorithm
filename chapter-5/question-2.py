@@ -66,40 +66,51 @@ class Tree:
         Returns:
         - The node that contains such data or None if data is not found
         """
+        current = self._root_node
+        while current:
+            if current.data == data:
+                return current
+            elif current.data > data:
+                current = current._left_child
+            else:
+                current = current._right_child
+        return None
 
-        if data == self._root_node.data:
-            return self._root_node.__repr__()
+    def find_minimum(self):
+        """
+        Returns the minimum value of the tree
+        """
+
+        if self._root_node == None:
+            return None
 
         current_node = self._root_node
+        if current_node._left_child == None:
+            return current_node
 
         while current_node:
+            current_node = current_node._left_child
 
-            if current_node.data == data:
-                return current_node.__repr__()
+            if current_node._left_child == None:
+                return current_node
 
-            if data <= current_node.data:
-                current_node = current_node._left_child
-            else:
-                current_node = current_node._right_child
+    def find_maximum(self):
+
+        if self._root_node == None:
+            return None
+
+        current_node = self._root_node
+        if current_node._right_child == None:
+            return current_node
+
+        while current_node:
+            current_node = current_node._right_child
+
+            if current_node._right_child == None:
+                return current_node
 
 
 tree = Tree()
-tree.insert(50)
-tree.insert(20)
-tree.insert(10)
-tree.insert(70)
-tree.insert(90)
-tree.insert(65)
-tree.insert(10)
-tree.insert(40)
-tree.insert(30)
-tree.insert(10)
-tree.insert(100)
-tree.insert(35)
-tree.insert(5)
-tree.insert(10)
-tree.insert(7)
-tree.insert(40)
-tree.insert(50)
-tree.insert(8)
-print(tree._find(20))
+minimum = tree.find_minimum()
+maximum = tree.find_maximum()
+print(minimum, maximum)
