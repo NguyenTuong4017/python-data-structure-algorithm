@@ -1,3 +1,6 @@
+# Write a method that from a given position find the next free slot of the table
+
+
 class HashItem:
     def __init__(self, key, value):
         self.key = key
