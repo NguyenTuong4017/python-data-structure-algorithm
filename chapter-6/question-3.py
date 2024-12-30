@@ -1,4 +1,4 @@
-# Write a method that add or updates a key with a value
+# Write a get method with alternative value
 
 
 class HashItem:
@@ -101,22 +101,53 @@ class HashTable:
 
         Returns: None
         """
-        item = HashItem(key, value)
-        index = self._hash(item.key)
+        # Raise an error if no space available
+        if self.used_slots == self.size:
+            raise (MemoryError("Hash table is full"))
 
-        if self.slots[index] != None:
-            replace_index = self._find_free_slot(index)
-
-            if replace_index == None:
-                raise MemoryError("err")
-
-            self.slots[replace_index] = item
+        #  Try to find the key
+        h = self._hash(key)
+        q = self._find_key(h, key)
+        if q is not None:
+            # If found, update the value
+            self.slots[q].value = value
         else:
-            self.slots[index] = item
+            # If not found, find a free slot
+            q = self._find_free_slot(h)
+            # Add a new element.
+            self.slots[q] = HashItem(key, value)
+            # And increase used_slots
+            self.used_slots += 1
+
+    def get(self, key, alternative=None):
+        """
+        Get the value of 'key'.
+
+        Parameters:
+        - 'key': The key to find
+        - 'alternative': An alternative value if key is not found.
+                         Optional. Default value=None
+
+        Returns: The value of 'key' or alternative value
+        """
+
+        for index, dict in enumerate(self.slots):
+            if self.slots[index] != None:
+                if dict.key == key:
+                    return dict.value
+        return alternative
 
 
 h = HashTable()
 
-h.put("Name", "HashTable")
+s = "abcdefghijklmnopqrstuvwxyz"
+for i in range(0, len(s) - 1, 2):
+    h.put(s[i : i + 2], s[i : i + 2])
 
-print(h.slots[229])
+for i in range(1, len(s) - 2, 2):
+    h.put(s[i : i + 2], s[i : i + 2])
+
+print(h.get("ab"))
+print(h.get("st"))
+print(h.get("zz", "Nothing"))
+print(h.get("e", "Nothing"))
